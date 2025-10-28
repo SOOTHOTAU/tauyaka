@@ -30,3 +30,18 @@
     }
   }
 }
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "newArchEnabled": false
+          }
+        }
+      ]
+    ]
+  }
+}
+
