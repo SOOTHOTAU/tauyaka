@@ -1,0 +1,119 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import AsyncStorage, { STORAGE_KEYS } from '../utils/storage.js';
+import { initialPosts } from '../utils/seed.js';
+
+const DataContext = createContext();
+
+export const DataProvider = ({ children }) => {
+    const [posts, setPosts] = useState([]);
+    const [archive, setArchive] = useState([]);
+    const [bookmarks, setBookmarks] = useState({});
+    const [helpfuls, setHelpfuls] = useState({});
+    const [comments, setComments] = useState({});
+    const [reports, setReports] = useState([]);
+    const [offers, setOffers] = useState([]);
+    const [rsvps, setRsvps] = useState({});
+    const [homeDismissedAlerts, setHomeDismissedAlerts] = useState({});
+    const [lastSeenAlertTs, setLastSeenAlertTs] = useState(0);
+    const [dismissedAlerts, setDismissedAlerts] = useState({});
+    const [mediaLoaded, setMediaLoaded] = useState({});
+    const [pushToken, setPushToken] = useState(null);
+    const [booting, setBooting] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let storedPosts = await AsyncStorage.getItem(STORAGE_KEYS.POSTS);
+                let currentPosts = storedPosts ? JSON.parse(storedPosts) : initialPosts;
+    
+                const [b, c, s, r, tok, of, dism, ar, ml, rsvpData, homeDism, hlp] = await Promise.all([
+                    AsyncStorage.getItem(STORAGE_KEYS.BOOKMARKS), AsyncStorage.getItem(STORAGE_KEYS.COMMENTS),
+                    AsyncStorage.getItem(STORAGE_KEYS.LAST_SEEN_ALERT_TS), AsyncStorage.getItem(STORAGE_KEYS.REPORTS),
+                    AsyncStorage.getItem(STORAGE_KEYS.PUSH_TOKEN), AsyncStorage.getItem(STORAGE_KEYS.OFFERS),
+                    AsyncStorage.getItem(STORAGE_KEYS.DISMISSED_ALERTS), AsyncStorage.getItem(STORAGE_KEYS.ARCHIVE),
+                    AsyncStorage.getItem(STORAGE_KEYS.MEDIA_LOADED),
+                    AsyncStorage.getItem("yaka_rsvps_v1"),
+                    AsyncStorage.getItem("yaka_home_dismissed_alerts_v1"),
+                    AsyncStorage.getItem("yaka_helpfuls_v1"),
+                ]);
+    
+                let storedArchive = ar ? JSON.parse(ar) : [];
+
+                // --- Auto-archive logic ---
+                const now = Date.now();
+                const activePosts = [];
+                const newlyArchived = [];
+                for (const post of currentPosts) {
+                    if (post.expiryDate && post.expiryDate < now) {
+                        newlyArchived.push(post);
+                    } else {
+                        activePosts.push(post);
+                    }
+                }
+                
+                if (newlyArchived.length > 0) {
+                    setPosts(activePosts);
+                    setArchive([...storedArchive, ...newlyArchived]);
+                } else {
+                    setPosts(currentPosts);
+                    setArchive(storedArchive);
+                }
+                // --- End auto-archive ---
+
+                if (b) setBookmarks(JSON.parse(b));
+                if (c) setComments(JSON.parse(c));
+                if (s) setLastSeenAlertTs(parseInt(s,10)||0);
+                if (r) setReports(JSON.parse(r));
+                if (tok) setPushToken(tok);
+                if (of) setOffers(JSON.parse(of));
+                if (dism) setDismissedAlerts(JSON.parse(dism));
+                if (ml) setMediaLoaded(JSON.parse(ml));
+                if (rsvpData) setRsvps(JSON.parse(rsvpData));
+                if (homeDism) setHomeDismissedAlerts(JSON.parse(homeDism));
+                if (hlp) setHelpfuls(JSON.parse(hlp));
+
+            } catch(e){ console.warn("[Yaka] Data load error", e); setPosts(initialPosts); }
+            finally { setTimeout(()=>setBooting(false),300); }
+        })();
+    }, []);
+
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts)).catch(()=>{}); },[posts, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.ARCHIVE, JSON.stringify(archive)).catch(()=>{}); },[archive, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(bookmarks)).catch(()=>{}); },[bookmarks, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.COMMENTS, JSON.stringify(comments)).catch(()=>{}); },[comments, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.REPORTS, JSON.stringify(reports)).catch(()=>{}); },[reports, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.OFFERS, JSON.stringify(offers)).catch(()=>{}); },[offers, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.DISMISSED_ALERTS, JSON.stringify(dismissedAlerts)).catch(()=>{}); },[dismissedAlerts, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem("yaka_home_dismissed_alerts_v1", JSON.stringify(homeDismissedAlerts)).catch(()=>{}); },[homeDismissedAlerts, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem("yaka_rsvps_v1", JSON.stringify(rsvps)).catch(()=>{}); },[rsvps, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem("yaka_helpfuls_v1", JSON.stringify(helpfuls)).catch(()=>{}); },[helpfuls, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.MEDIA_LOADED, JSON.stringify(mediaLoaded)).catch(()=>{}); },[mediaLoaded, booting]);
+    useEffect(()=>{ if(!booting) AsyncStorage.setItem(STORAGE_KEYS.LAST_SEEN_ALERT_TS, String(lastSeenAlertTs)).catch(()=>{}); },[lastSeenAlertTs, booting]);
+    useEffect(()=>{ if(!booting && pushToken) AsyncStorage.setItem(STORAGE_KEYS.PUSH_TOKEN, pushToken).catch(()=>{}); },[pushToken, booting]);
+
+
+    const value = {
+        posts, setPosts,
+        archive, setArchive,
+        bookmarks, setBookmarks,
+        helpfuls, setHelpfuls,
+        comments, setComments,
+        reports, setReports,
+        offers, setOffers,
+        rsvps, setRsvps,
+        homeDismissedAlerts, setHomeDismissedAlerts,
+        lastSeenAlertTs, setLastSeenAlertTs,
+        dismissedAlerts, setDismissedAlerts,
+        mediaLoaded, setMediaLoaded,
+        pushToken, setPushToken,
+        booting,
+    };
+
+    return (
+        <DataContext.Provider value={value}>
+            {children}
+        </DataContext.Provider>
+    );
+};
+
+export const useData = () => useContext(DataContext);

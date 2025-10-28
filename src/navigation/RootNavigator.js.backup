@@ -1,0 +1,167 @@
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, Platform } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Contexts & Hooks
+import { usePrefs } from '../context/PreferencesContext.js';
+import { useAuth } from '../context/AuthContext.js';
+import { useData } from '../context/DataContext.js';
+
+// Screens
+import HomeScreen from '../screens/HomeScreen.js';
+import MessagesScreen from '../screens/Messages/InboxScreen.js';
+import ChatThreadScreen from '../screens/Messages/ChatThreadScreen.js';
+import GroupsScreen from '../screens/GroupsScreen.js';
+import MarketplaceScreen from '../screens/MarketplaceScreen.js';
+import ProfileScreen from '../screens/ProfileScreen.js';
+import SavedScreen from '../screens/SavedScreen.js';
+import AlertsScreen from '../screens/AlertsScreen.js';
+import MyPostsScreen from '../screens/MyPostsScreen.js';
+import ArchiveScreen from '../screens/ArchiveScreen.js';
+import LoginScreen from '../screens/LoginScreen.js';
+
+// Modal Screens
+import CreatePostModal from '../components/modals/CreatePostModal.js';
+import CommentsScreen from '../screens/modals/CommentsScreen.js';
+import ProfilePreviewScreen from '../screens/modals/ProfilePreviewScreen.js';
+import SettingsAndPreferencesScreen from '../screens/modals/SettingsAndPreferencesScreen.js';
+import HelpAboutScreen from '../screens/modals/HelpAboutScreen.js';
+
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+const MessagesStack = createNativeStackNavigator();
+const GroupsStack = createNativeStackNavigator();
+const MarketStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
+
+const screenOptions = { headerShown: false };
+
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator screenOptions={screenOptions}>
+      <HomeStack.Screen name="HomeRoot" component={HomeScreen} />
+    </HomeStack.Navigator>
+  );
+}
+function MessagesStackNavigator() {
+  return (
+    <MessagesStack.Navigator screenOptions={screenOptions}>
+      <MessagesStack.Screen name="Inbox" component={MessagesScreen} />
+      <MessagesStack.Screen name="ChatThread" component={ChatThreadScreen} />
+    </MessagesStack.Navigator>
+  );
+}
+function GroupsStackNavigator() {
+  return (
+    <GroupsStack.Navigator screenOptions={screenOptions}>
+      <GroupsStack.Screen name="GroupsRoot" component={GroupsScreen} />
+    </GroupsStack.Navigator>
+  );
+}
+function MarketStackNavigator() {
+  return (
+    <MarketStack.Navigator screenOptions={screenOptions}>
+      <MarketStack.Screen name="MarketRoot" component={MarketplaceScreen} />
+    </MarketStack.Navigator>
+  );
+}
+function ProfileStackNavigator() {
+  return (
+    <ProfileStack.Navigator screenOptions={screenOptions}>
+      <ProfileStack.Screen name="ProfileRoot" component={ProfileScreen} />
+      <ProfileStack.Screen name="SavedPosts" component={SavedScreen} />
+      <ProfileStack.Screen name="MyPosts" component={MyPostsScreen} />
+      <ProfileStack.Screen name="Archive" component={ArchiveScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+
+
+function BottomTabNavigator() {
+  const { C, styles, t } = usePrefs();
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          const iconMap = {
+            Home: focused ? 'home' : 'home-outline',
+            Messages: focused ? 'chatbubbles' : 'chatbubbles-outline',
+            Groups: focused ? 'people' : 'people-outline',
+            Marketplace: focused ? 'cart' : 'cart-outline',
+            Profile: focused ? 'person' : 'person-outline',
+          };
+          return <Ionicons name={iconMap[route.name]} size={size} color={focused ? C.primary : C.text} />;
+        },
+        tabBarLabel: ({ focused }) => {
+          const labelMap = { Home: t.navHome, Messages: t.navMessages, Groups: t.navGroups, Marketplace: t.navMarket, Profile: t.navProfile };
+          return <Text style={[styles.navLabel, focused && styles.navLabelActive]}>{labelMap[route.name]}</Text>;
+        },
+        tabBarStyle: {
+          backgroundColor: C.bg,
+          borderTopColor: C.border,
+          height: Platform.OS === 'ios' ? 90 : 65,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 8,
+          paddingBottom: Platform.OS === 'ios' ? 30 : 10,
+        }
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="Messages" component={MessagesStackNavigator} />
+      <Tab.Screen name="Groups" component={GroupsStackNavigator} />
+      <Tab.Screen name="Marketplace" component={MarketStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+    </Tab.Navigator>
+  );
+}
+
+export default function RootNavigator() {
+  const { booting } = useData();
+  const { C, styles } = usePrefs();
+  const { isLoggedIn, isLoadingAuth } = useAuth();
+
+  if (booting || isLoadingAuth) {
+    const SkeletonCard = () => (
+      <View style={styles.skelCard}>
+        <View style={[styles.skelLineWide, { width: '60%', backgroundColor: C.border }]} />
+        <View style={[styles.skelLine, { width: '80%', backgroundColor: C.border }]} />
+        <View style={[styles.skelLine, { width: '75%', backgroundColor: C.border }]} />
+      </View>
+    );
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ padding: 16 }}>
+          <Text style={[styles.headerTitle, { textAlign: 'left', marginBottom: 16 }]}>Loading Yaka...</Text>
+        </View>
+        <SkeletonCard /><SkeletonCard /><SkeletonCard /><SkeletonCard />
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {!isLoggedIn ? (
+         <Stack.Screen name="Login" component={LoginScreen} />
+      ) : (
+        <>
+          <Stack.Screen name="Main" component={BottomTabNavigator} />
+          {/* Modal Screens */}
+          <Stack.Screen name="Alerts" component={AlertsScreen} options={{ presentation: 'modal' }} />
+          <Stack.Screen name="CreatePost" component={CreatePostModal} options={{ presentation: 'modal' }} />
+          <Stack.Screen name="Comments" component={CommentsScreen} options={{ presentation: 'modal' }} />
+          <Stack.Screen name="ProfilePreview" component={ProfilePreviewScreen} options={{ presentation: 'modal' }} />
+          <Stack.Screen name="Settings" component={SettingsAndPreferencesScreen} options={{ presentation: 'modal' }} />
+          <Stack.Screen name="HelpAbout" component={HelpAboutScreen} options={{ presentation: 'modal' }} />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+}

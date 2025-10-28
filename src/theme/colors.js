@@ -1,0 +1,2 @@
+export const LIGHT = { primary:"#034750", accent:"#F4A300", text:"#0E1A1C", subtext:"#6B7A7C", border:"#E9EEF0", bg:"#FFFFFF", soft:"#F6F8F9", cardAlt:"#FFF9E6", headerShadow:"#00000010", error:"#D32F2F" };
+export const DARK  = { primary:"#74D1DE", accent:"#FFC459", text:"#EEF6F7", subtext:"#C2D0D4", border:"#3B4A4F", bg:"#0F1719", soft:"#162127", cardAlt:"#2B2412", headerShadow:"#00000050", error:"#EF9A9A" };
