@@ -23,25 +23,12 @@
     ],
     "android": {
       "permissions": ["android.permission.POST_NOTIFICATIONS"],
-      "adaptiveIcon": { "backgroundColor": "#ffffff" }
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      }
     },
     "ios": {
       "supportsTablet": true
     }
   }
 }
-{
-  "expo": {
-    "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "newArchEnabled": false
-          }
-        }
-      ]
-    ]
-  }
-}
-
