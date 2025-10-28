@@ -1,5 +1,4 @@
-@"
-{
+﻿{
   "cli": { "version": ">= 12.0.0" },
   "build": {
     "preview": {
@@ -14,4 +13,3 @@
     }
   }
 }
-"@ | Out-File -Encoding utf8 eas.json
