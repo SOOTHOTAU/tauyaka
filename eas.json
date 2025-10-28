@@ -1,0 +1,15 @@
+{
+  "cli": { "version": ">= 12.0.0" },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": { "buildType": "apk" },
+      "env": { "EXPO_NO_NEW_ARCH": "1" }
+    },
+    "preview": {
+      "android": { "buildType": "apk" },
+      "env": { "EXPO_NO_NEW_ARCH": "1" }
+    }
+  }
+}
