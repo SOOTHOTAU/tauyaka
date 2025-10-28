@@ -3,11 +3,11 @@
     "preview": {
       "android": { "buildType": "apk" },
       "env": { "NODE_ENV": "production" },
-      "cache": { "key": "yakabuild-v2" }
+      "cache": { "key": "yakabuild-v4" }
     },
     "production": {
       "env": { "NODE_ENV": "production" },
-      "cache": { "key": "yakabuild-v2" }
+      "cache": { "key": "yakabuild-v4" }
     }
   }
 }
