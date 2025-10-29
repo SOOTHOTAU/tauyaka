@@ -3,16 +3,11 @@
     "name": "yaka",
     "slug": "yaka",
     "plugins": [
-      "./plugins/withPrefab",
-      "./plugins/withReactAndroidDep",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "newArchEnabled": false
-          }
+      ["expo-build-properties", {
+        "android": {
+          "newArchEnabled": true
         }
-      ]
+      }]
     ]
   }
 }
