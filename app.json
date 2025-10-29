@@ -13,13 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
-
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.soothotau.yaka",
       "buildNumber": "1"
     },
-
     "android": {
       "package": "com.soothotau.yaka",
       "versionCode": 1,
@@ -28,23 +26,16 @@
         "backgroundColor": "#ffffff"
       }
     },
-
     "plugins": [
       [
         "expo-build-properties",
         {
-          "android": {
-            "newArchEnabled": true
-          },
-          "ios": {
-            "newArchEnabled": true
-          }
+          "android": { "newArchEnabled": true },
+          "ios": { "newArchEnabled": true }
         }
       ]
     ],
-
     "runtimeVersion": { "policy": "appVersion" },
-
     "extra": {
       "eas": {
         "projectId": "REPLACE_WITH_YOUR_EAS_PROJECT_ID"
