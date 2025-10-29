@@ -39,7 +39,8 @@
       "**/*"
     ],
     "plugins": [
-      "expo-notifications"
+      "expo-notifications",
+      "expo-build-properties"
     ],
     "android": {
       "permissions": [
