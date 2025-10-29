@@ -1,68 +1,64 @@
 {
   "expo": {
-    "name": "yaka",
+    "name": "Yaka",
     "slug": "yaka",
     "version": "1.0.0",
+    "scheme": "yaka",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "yaka",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "url": "https://u.expo.dev/00000000-0000-0000-0000-000000000000",
+      "fallbackToCacheTimeout": 0
+    },
     "assetBundlePatterns": ["**/*"],
-
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.soothotau.yaka"
+    },
     "android": {
-      "package": "com.yaka.app",
-      "versionCode": 1,
+      "package": "com.soothotau.yaka",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "permissions": [],
-      "softwareKeyboardLayoutMode": "resize",
-      "allowBackup": true
+      }
     },
-
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yaka.app"
-    },
-
     "plugins": [
-      // ✅ Force New Architecture flag in gradle.properties
-      "./plugins/withNewArchGradleProp",
-
-      // ✅ Expo build properties plugin — ensures proper Android config
       [
         "expo-build-properties",
         {
           "android": {
-            "newArchEnabled": true,
-            "compileSdkVersion": 36,
-            "targetSdkVersion": 36,
-            "minSdkVersion": 24,
-            "buildToolsVersion": "36.0.0",
-            "kotlinVersion": "2.1.20"
+            "newArchEnabled": true
+            /* You can optionally set these if needed:
+               "minSdkVersion": 23,
+               "compileSdkVersion": 35,
+               "targetSdkVersion": 35,
+               "kotlinVersion": "1.9.24"
+            */
+          },
+          "ios": {
+            "newArchEnabled": true
           }
         }
       ]
+      /* add other plugins here if you actually use them, e.g.
+         ["expo-router"],
+         ["expo-localization"],
+         etc.
+      */
     ],
-
-    "updates": {
-      "url": "https://u.expo.dev/your-update-id-here"
-    },
-
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
-
     "extra": {
       "eas": {
-        "projectId": "YOUR-EAS-PROJECT-ID"
+        "projectId": "PUT-YOUR-EAS-PROJECT-ID-HERE"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
