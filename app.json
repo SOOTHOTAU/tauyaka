@@ -2,8 +2,67 @@
   "expo": {
     "name": "yaka",
     "slug": "yaka",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "yaka",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+
+    "android": {
+      "package": "com.yaka.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [],
+      "softwareKeyboardLayoutMode": "resize",
+      "allowBackup": true
+    },
+
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yaka.app"
+    },
+
     "plugins": [
-      ["expo-build-properties", { "android": { "newArchEnabled": true } }]
-    ]
+      // ✅ Force New Architecture flag in gradle.properties
+      "./plugins/withNewArchGradleProp",
+
+      // ✅ Expo build properties plugin — ensures proper Android config
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "newArchEnabled": true,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "minSdkVersion": 24,
+            "buildToolsVersion": "36.0.0",
+            "kotlinVersion": "2.1.20"
+          }
+        }
+      ]
+    ],
+
+    "updates": {
+      "url": "https://u.expo.dev/your-update-id-here"
+    },
+
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+
+    "extra": {
+      "eas": {
+        "projectId": "YOUR-EAS-PROJECT-ID"
+      }
+    }
   }
 }
