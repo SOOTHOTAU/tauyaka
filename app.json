@@ -6,60 +6,26 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-<<<<<<< HEAD
     "splash": { "backgroundColor": "#ffffff" },
     "assetBundlePatterns": ["**/*"],
 
-    // <- HARD SWITCH: disable New Architecture here
     "newArchEnabled": false,
 
     "plugins": [
       "expo-notifications",
       [
         "expo-build-properties",
-        {
-          "android": {
-            "newArchEnabled": false
-          }
-        }
+        { "android": { "newArchEnabled": false } }
       ]
     ],
     "android": {
+      "package": "com.soothotau.yaka",
       "permissions": ["android.permission.POST_NOTIFICATIONS"],
       "adaptiveIcon": { "backgroundColor": "#ffffff" }
     },
-    "ios": { "supportsTablet": true }
-=======
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "plugins": [
-      "expo-notifications",
-      "expo-build-properties"
-    ],
-    "android": {
-      "permissions": [
-        "android.permission.POST_NOTIFICATIONS"
-      ],
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.soothota.yaka"
-    },
     "ios": {
+      "bundleIdentifier": "com.soothotau.yaka",
       "supportsTablet": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "e06bd5eb-a94d-4363-912f-273025f1e233"
-      }
     }
->>>>>>> 337d596 (chore(android): force New Architecture OFF via expo-build-properties)
   }
 }
