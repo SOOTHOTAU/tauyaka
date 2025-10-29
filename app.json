@@ -6,10 +6,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "backgroundColor": "#ffffff"
-    },
+    "splash": { "backgroundColor": "#ffffff" },
     "assetBundlePatterns": ["**/*"],
+
+    // <- HARD SWITCH: disable New Architecture here
+    "newArchEnabled": false,
+
     "plugins": [
       "expo-notifications",
       [
@@ -23,12 +25,8 @@
     ],
     "android": {
       "permissions": ["android.permission.POST_NOTIFICATIONS"],
-      "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
-      }
+      "adaptiveIcon": { "backgroundColor": "#ffffff" }
     },
-    "ios": {
-      "supportsTablet": true
-    }
+    "ios": { "supportsTablet": true }
   }
 }
